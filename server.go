@@ -30,8 +30,10 @@ func main() {
 		c.FileAttachment(filePath, "fileName")
 
 	})
-
-	router.GET("/download/:filename", controllers.DownloadFolder)
+	router.GET("/download/:audioId", func(c *gin.Context) {
+		audioId := c.Param("audioId")
+		controllers.DownloadFolder(c, audioId)
+	})
 	router.GET("/catalog/:type", func(c *gin.Context) {
 		sectionType := c.Param("type")
 		c.Header("Content-Type", "application/json")
@@ -39,10 +41,13 @@ func main() {
 		c.Writer.WriteHeader(http.StatusOK)
 		c.Writer.Write(controllers.ReturnCatalog(sectionType))
 	})
-	// router.GET("/audiofile/:id", func(c *gin.Context) {
-	// 	fileId := c.Param("id")
-	// 	c.JSON(200, controllers.ReturnAudioFileData(fileId))
-	// })
+	router.GET("/audio/:id", func(c *gin.Context) {
+		audioId := c.Param("id")
+		c.Header("Content-Type", "application/json")
+
+		c.Writer.WriteHeader(http.StatusOK)
+		c.Writer.Write(controllers.ReturnAudioFileData(audioId))
+	})
 	router.POST("/upload/:id", func(c *gin.Context) {
 		id := c.Param("id")
 

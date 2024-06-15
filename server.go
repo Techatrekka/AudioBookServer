@@ -5,12 +5,16 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"server/configs"
 	"server/controllers"
 
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
+	database, _ := configs.ConnectDB()
+	database.SignInWithEmailPassword("test@email.com", "test")
+
 	router := gin.Default()
 	// this is a max upload of 256 MIBs
 	router.MaxMultipartMemory = 256 << 20
@@ -28,7 +32,6 @@ func main() {
 		audiobookId := c.Param("audiobookId")
 		filePath := "./Audiobooks/" + audiobookId
 		c.FileAttachment(filePath, "fileName")
-
 	})
 	router.GET("/download/:audioId", func(c *gin.Context) {
 		audioId := c.Param("audioId")
@@ -57,8 +60,6 @@ func main() {
 			return
 		}
 		files := form.File["files"]
-
-		print(len(files))
 
 		uploadDir := "./AudioBooks/" + id
 		err := os.MkdirAll(uploadDir, os.ModePerm)

@@ -10,9 +10,20 @@ import (
 	"server/database"
 	"server/filemanager"
 	"server/models"
+	"strconv"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 )
+
+type TapeResponse struct {
+	TapeId      string `json:"tape_id"`
+	Title       string `json:"title"`
+	Author      string `json:"author"`
+	Synopsis    string `json:"synopsis"`
+	IsAudiobook string `json:"is_audiobook"`
+	Tags        string `json:"tags"`
+}
 
 func ReturnCatalog(section string) []byte {
 	result := database.SelectAll("Tape")
@@ -24,7 +35,20 @@ func ReturnCatalog(section string) []byte {
 	if len(tapes) == 0 {
 		panic("Empty array returned from DB")
 	}
-	jsonString, _ := json.Marshal(tapes)
+	var TapeResponses []TapeResponse
+	for i := 0; i < len(tapes); i++ {
+		newTapeResponse := TapeResponse{
+			TapeId:      strconv.Itoa(tapes[i].TapeId),
+			Title:       tapes[i].Title,
+			Author:      tapes[i].Author,
+			Synopsis:    tapes[i].Synopsis,
+			IsAudiobook: strconv.FormatBool(tapes[i].IsAudiobook),
+			Tags:        strings.Trim(strings.Join(strings.Split(fmt.Sprint(tapes[i].Tags), " "), ","), "[]"),
+		}
+		TapeResponses = append(TapeResponses, newTapeResponse)
+	}
+
+	jsonString, _ := json.Marshal(TapeResponses)
 	return jsonString
 }
 

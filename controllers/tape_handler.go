@@ -53,7 +53,7 @@ func ReturnCatalog(section string) []byte {
 }
 
 func ReturnAudioFileData(id string) []byte {
-	result := database.SelectById("Tape", "1")
+	result := database.SelectById("Tape", id)
 	var value []models.Tape
 	err := json.Unmarshal(result, &value)
 	if err != nil {

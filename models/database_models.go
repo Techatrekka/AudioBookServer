@@ -24,11 +24,10 @@ type Tape struct {
 }
 
 type ListeningHistory struct {
-	TapeId          int       `json:"tape_id"`
-	UserId          int       `json:"user_id"`
-	CurrentChapter  int       `json:"current_chapter"`
-	ChapterProgress string    `json:"chapter_progress"`
-	UpdatedAt       time.Time `json:"updated_at"`
+	TapeId          int `json:"tape_id"`
+	UserId          int `json:"user_id"`
+	CurrentChapter  int `json:"current_chapter"`
+	ChapterProgress int `json:"chapter_progress"`
 }
 
 type Review struct {

@@ -25,4 +25,5 @@ func TapeEndpoints(router *gin.Engine) {
 
 	//POST Endpoints
 	router.POST("/upload/:id", controllers.UploadFile)
+	router.POST("/uploadListeningHistory/", controllers.UploadListeningHistory)
 }

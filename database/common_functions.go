@@ -23,3 +23,11 @@ func SelectAll(table string) []byte {
 	}
 	return data
 }
+
+func UploadObjectToTable(table string, object any) {
+	database := configs.GetDBClient()
+	_, _, err1 := database.From(table).Upsert(object, "", "", "").Execute()
+	if err1 != nil {
+		panic(err1)
+	}
+}

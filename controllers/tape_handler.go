@@ -135,3 +135,10 @@ func GetCatalogByType(c *gin.Context) {
 	c.Writer.WriteHeader(http.StatusOK)
 	c.Writer.Write(ReturnCatalog(sectionType))
 }
+
+func UploadListeningHistory(c *gin.Context) {
+	var req models.ListeningHistory
+	c.BindJSON(&req)
+	database.UploadObjectToTable("ListeningHistory", req)
+
+}

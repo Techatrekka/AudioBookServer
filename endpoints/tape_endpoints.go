@@ -9,7 +9,7 @@ import (
 
 func TapeEndpoints(router *gin.Engine) {
 	//GET Endpoints
-	router.GET("/downloadfolder/:folderType/filename/:fileName", controllers.DownloadFile)
+	router.GET("/downloadfile/:fileId", controllers.DownloadImage)
 	router.GET("/download/:audioId", func(c *gin.Context) {
 		audioId := c.Param("audioId")
 		controllers.DownloadFolder(c, audioId)
@@ -21,6 +21,10 @@ func TapeEndpoints(router *gin.Engine) {
 
 		c.Writer.WriteHeader(http.StatusOK)
 		c.Writer.Write(controllers.ReturnAudioFileData(audioId))
+	})
+	router.GET("/getListeningHistory/", func(c *gin.Context) {
+		c.Writer.WriteHeader(http.StatusOK)
+		c.Writer.Write(controllers.GetListeningHistory(c))
 	})
 
 	//POST Endpoints

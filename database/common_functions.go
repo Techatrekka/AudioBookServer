@@ -31,3 +31,16 @@ func UploadObjectToTable(table string, object any) {
 		panic(err1)
 	}
 }
+
+func SelectByCompositeId(
+	table string, column1 string,
+	column2 string, id1 string, id2 string) []byte {
+	database := configs.GetDBClient()
+	data, _, err1 := database.From(table).Select("*", "", false).Eq(
+		strings.ToLower(column1)+"_id", id1).Eq(
+		strings.ToLower(column2)+"_id", id2).Execute()
+	if err1 != nil {
+		panic(err1)
+	}
+	return data
+}

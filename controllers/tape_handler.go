@@ -121,11 +121,16 @@ func UploadFile(c *gin.Context) {
 	c.String(http.StatusOK, fmt.Sprintf("Uploaded %d files successfully", len(files)))
 }
 
-func DownloadFile(c *gin.Context) {
-	fileName := c.Param("fileName")
-	folderType := c.Param("folderType")
-	filePath := "./" + folderType + "/" + fileName
-	c.FileAttachment(filePath, fileName)
+func DownloadImage(c *gin.Context) {
+	fileName := c.Param("fileId")
+	filePath := "./Audiobooks/" + fileName + "/image.png"
+
+	fileBytes, err := os.ReadFile(filePath)
+	if err != nil {
+		panic(err)
+	}
+
+	c.Data(http.StatusOK, "image/png", fileBytes)
 }
 
 func GetCatalogByType(c *gin.Context) {
@@ -140,5 +145,17 @@ func UploadListeningHistory(c *gin.Context) {
 	var req models.ListeningHistory
 	c.BindJSON(&req)
 	database.UploadObjectToTable("ListeningHistory", req)
+}
 
+func GetListeningHistory(c *gin.Context) []byte {
+	var req []models.ListeningHistory
+	userId := c.Query("user_id")
+	tapeId := c.Query("tape_id")
+	result := database.SelectByCompositeId("ListeningHistory", "user", "tape", userId, tapeId)
+	err := json.Unmarshal(result, &req)
+	if err != nil {
+		print("Unmarshalling failed")
+	}
+	return result
+	// print(req[len(req)-1].CurrentChapter)
 }

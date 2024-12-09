@@ -9,6 +9,34 @@ import (
 	"path/filepath"
 )
 
+// Struct to hold file details
+type FileInfo struct {
+	Name string `json:"name"`
+	Size int64  `json:"size"`
+}
+
+// Function to list files with detailed information (name and size)
+func ListAudioBookFilesDetailed() ([]FileInfo, error) {
+	files, err := os.ReadDir("./Audiobooks")
+	if err != nil {
+		return nil, fmt.Errorf("error reading directory: %w", err)
+	}
+
+	var fileInfos []FileInfo
+	for _, file := range files {
+		info, err := file.Info()
+		if err != nil {
+			return nil, fmt.Errorf("error getting file info: %w", err)
+		}
+		fileInfos = append(fileInfos, FileInfo{
+			Name: info.Name(),
+			Size: info.Size(),
+		})
+	}
+	return fileInfos, nil
+}
+
+// Function to list files (returns a slice of DirEntry)
 func ListAudioBookFiles() []fs.DirEntry {
 	files, err := os.ReadDir("./AudioBooks")
 	if err != nil {
@@ -20,6 +48,7 @@ func ListAudioBookFiles() []fs.DirEntry {
 	return files
 }
 
+// Function to retrieve a specific audiobook file
 func RetrieveAudioBook(Name string) []byte {
 	file, err := os.ReadFile("./Audiobooks/" + Name)
 	if err != nil {
@@ -28,10 +57,12 @@ func RetrieveAudioBook(Name string) []byte {
 	return file
 }
 
+// Placeholder function to create a new audiobook (currently empty)
 func CreateNewAudioBook() {
-
+	// Implementation for creating new audiobooks can go here
 }
 
+// Function to zip a folder and save the zip file to a specified location
 func ZipFolder(folderPath, zipFileFolder string, zipFileName string) error {
 	_, fileExistsErr := os.Stat(zipFileName)
 	switch fileExistsErr {

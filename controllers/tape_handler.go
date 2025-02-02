@@ -25,16 +25,7 @@ type TapeResponse struct {
 	Tags        string `json:"tags"`
 }
 
-func ReturnCatalog(section string) []byte {
-	result := database.SelectAll("Tape")
-	var tapes []models.Tape
-	err := json.Unmarshal(result, &tapes)
-	if err != nil {
-		print(err)
-	}
-	if len(tapes) == 0 {
-		panic("Empty array returned from DB")
-	}
+func ReturnCatalog(section string, tapes []models.Tape) []byte {
 	var TapeResponses []TapeResponse
 	for i := 0; i < len(tapes); i++ {
 		newTapeResponse := TapeResponse{
@@ -138,7 +129,7 @@ func GetCatalogByType(c *gin.Context) {
 	c.Header("Content-Type", "application/json")
 
 	c.Writer.WriteHeader(http.StatusOK)
-	c.Writer.Write(ReturnCatalog(sectionType))
+	c.Writer.Write(ReturnCatalog(sectionType, getAllTapes()))
 }
 
 func UploadListeningHistory(c *gin.Context) {
@@ -158,4 +149,17 @@ func GetListeningHistory(c *gin.Context) []byte {
 	}
 	return result
 	// print(req[len(req)-1].CurrentChapter)
+}
+
+func getAllTapes() []models.Tape {
+	result := database.SelectAll("Tape")
+	var tapes []models.Tape
+	err := json.Unmarshal(result, &tapes)
+	if err != nil {
+		print(err)
+	}
+	if len(tapes) == 0 {
+		panic("Empty array returned from DB")
+	}
+	return tapes
 }

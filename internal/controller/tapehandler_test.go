@@ -1,14 +1,14 @@
-package controllers
+package controller
 
 import (
-	"server/models"
+	"clos/internal/model"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
 
-func mockTapes() []models.Tape {
-	var tapes []models.Tape
+func mockTapes() []model.Tape {
+	var tapes []model.Tape
 	return tapes
 }
 

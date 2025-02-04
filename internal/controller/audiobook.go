@@ -1,8 +1,8 @@
-package controllers
+package controller
 
 import (
+	"clos/internal/filemanager"
 	"net/http"
-	"server/filemanager"
 
 	"github.com/gin-gonic/gin"
 )

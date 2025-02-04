@@ -1,4 +1,4 @@
-package models
+package model
 
 type Audiobook struct {
 	AudioFile    string `json:"audioFile"`

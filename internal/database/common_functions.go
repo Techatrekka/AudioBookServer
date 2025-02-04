@@ -1,7 +1,7 @@
 package database
 
 import (
-	"server/configs"
+	"clos/internal/configs"
 	"strings"
 )
 

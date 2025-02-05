@@ -19,10 +19,6 @@ make build
 make deploy
 ```
 
-Command to run is
-
-go run .
-
 For Bruno Collection
 <https://github.com/usebruno/bruno>
 This is to replace Postman because it is being ass with its pricing tiers

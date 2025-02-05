@@ -1,9 +1,9 @@
 package main
 
 import (
+	"clos/internal/configs"
+	"clos/internal/endpoint"
 	"fmt"
-	"server/configs"
-	"server/endpoints"
 
 	"github.com/gin-gonic/gin"
 )
@@ -17,8 +17,8 @@ func main() {
 	router.MaxMultipartMemory = 256 << 20 // Set max upload size to 256 MiB
 
 	// Register endpoint groups
-	endpoints.TapeEndpoints(router)
-	endpoints.AudiobookEndpoints(router)
+	endpoint.TapeEndpoints(router)
+	endpoint.AudiobookEndpoints(router)
 
 	// Serve static files
 	router.Static("/static/audio", "./Audiobooks")             // Serve MP3 files from /static/audio

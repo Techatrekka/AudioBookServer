@@ -1,15 +1,15 @@
-package controllers
+package controller
 
 import (
+	"clos/internal/database"
+	"clos/internal/filemanager"
+	"clos/internal/model"
 	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
 	"os"
 	"path/filepath"
-	"server/database"
-	"server/filemanager"
-	"server/models"
 	"strconv"
 	"strings"
 
@@ -25,7 +25,7 @@ type TapeResponse struct {
 	Tags        string `json:"tags"`
 }
 
-func ReturnCatalog(section string, tapes []models.Tape) []byte {
+func ReturnCatalog(section string, tapes []model.Tape) []byte {
 	var TapeResponses []TapeResponse
 	for i := 0; i < len(tapes); i++ {
 		newTapeResponse := TapeResponse{
@@ -45,7 +45,7 @@ func ReturnCatalog(section string, tapes []models.Tape) []byte {
 
 func ReturnAudioFileData(id string) []byte {
 	result := database.SelectById("Tape", id)
-	var value []models.Tape
+	var value []model.Tape
 	err := json.Unmarshal(result, &value)
 	if err != nil {
 		print(err)
@@ -133,13 +133,13 @@ func GetCatalogByType(c *gin.Context) {
 }
 
 func UploadListeningHistory(c *gin.Context) {
-	var req models.ListeningHistory
+	var req model.ListeningHistory
 	c.BindJSON(&req)
 	database.UploadObjectToTable("ListeningHistory", req)
 }
 
 func GetListeningHistory(c *gin.Context) []byte {
-	var req []models.ListeningHistory
+	var req []model.ListeningHistory
 	userId := c.Query("user_id")
 	tapeId := c.Query("tape_id")
 	result := database.SelectByCompositeId("ListeningHistory", "user", "tape", userId, tapeId)
@@ -151,9 +151,9 @@ func GetListeningHistory(c *gin.Context) []byte {
 	// print(req[len(req)-1].CurrentChapter)
 }
 
-func getAllTapes() []models.Tape {
+func getAllTapes() []model.Tape {
 	result := database.SelectAll("Tape")
-	var tapes []models.Tape
+	var tapes []model.Tape
 	err := json.Unmarshal(result, &tapes)
 	if err != nil {
 		print(err)

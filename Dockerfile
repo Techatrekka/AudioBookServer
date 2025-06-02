@@ -1,5 +1,5 @@
 # Use official Golang image as a builder
-FROM golang:1.21 AS builder
+FROM golang:1.24 AS builder
 
 # Set working directory
 WORKDIR /app
@@ -12,7 +12,7 @@ RUN go mod tidy
 COPY . .
 
 # Ensure the binary is built for Alpine Linux
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o server server.go
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o server ./cmd/server/main.go
 
 # Use a lightweight Alpine Linux image
 FROM alpine:latest
@@ -30,4 +30,3 @@ EXPOSE 8080
 
 # Run the application
 CMD ["/root/server"]
-

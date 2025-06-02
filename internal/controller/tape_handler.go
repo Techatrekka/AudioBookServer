@@ -2,7 +2,6 @@ package controller
 
 import (
 	"clos/internal/database"
-	"clos/internal/filemanager"
 	"clos/internal/model"
 	"encoding/json"
 	"fmt"
@@ -57,16 +56,17 @@ func ReturnAudioFileData(id string) []byte {
 	return jsonString
 }
 
+// to be replaced by S3 or some sort of cloud storage
 func DownloadFolder(c *gin.Context, audioId string) {
-	folderPath := "./Audiobooks/" + audioId + "/"
-	zipFileFolder := "./AudiobooksZipped/" + audioId + "/"
+	// folderPath := "./assets/audio/" + audioId + "/"
+	// zipFileFolder := "./AudiobooksZipped/" + audioId + "/"
 	zipFileName := "./AudiobooksZipped/" + audioId + "/files.zip"
 
-	err := filemanager.ZipFolder(folderPath, zipFileFolder, zipFileName)
-	if err != nil {
-		c.String(http.StatusInternalServerError, "Error creating zip file: %v", err)
-		return
-	}
+	// err := filemanager.ZipFolder(folderPath, zipFileFolder, zipFileName)
+	// if err != nil {
+	// 	c.String(http.StatusInternalServerError, "Error creating zip file: %v", err)
+	// 	return
+	// }
 	// we can talk about this if you would like but I think we should reuse the zip files
 	// and leave the original files there as a backup
 	//defer os.Remove(zipFileName)
@@ -84,6 +84,7 @@ func DownloadFolder(c *gin.Context, audioId string) {
 	io.Copy(c.Writer, file)
 }
 
+// this too
 func UploadFile(c *gin.Context) {
 	id := c.Param("id")
 
@@ -114,7 +115,7 @@ func UploadFile(c *gin.Context) {
 
 func DownloadImage(c *gin.Context) {
 	fileName := c.Param("fileId")
-	filePath := "./Audiobooks/" + fileName + "/image.png"
+	filePath := "/root/assets/image/" + fileName + "/image.png"
 
 	fileBytes, err := os.ReadFile(filePath)
 	if err != nil {
